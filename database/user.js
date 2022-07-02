@@ -1,22 +1,23 @@
 const { query } = require('express');
 const client = require('./client.js')
 
-function login(data) {
-    client.connect(err => {
-        const database = client.db("MyDB");
-        const user = database.collection("User")
+async function login(data) {
+    await client.connect();
 
-        const query = {Username: data.name}
+    const database = client.db("MyDB");
+    const user = database.collection("User")
 
-        user.findOne(query, (err, result) => {
-            client.close()
-            if (result) {
-                return result.Password == data.password
-            } else {
-                return false
-            }
-        })
-    })
+    const query = { Username: data.name }
+
+    const result = await user.findOne(query)
+
+    await client.close()
+
+    if (result) {
+        return result.Password == data.password
+    } else {
+        return false
+    }
 }
 
 module.exports = {
