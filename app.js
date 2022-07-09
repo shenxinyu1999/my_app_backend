@@ -8,7 +8,7 @@ const port = 3000
 
 const login = require('./routing/login')
 
-app.use(cors());
+app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
