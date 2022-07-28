@@ -5,8 +5,6 @@ const bodyParser = require('body-parser')
 const app = express()
 const port = process.env.PORT || 3000
 
-const login = require('./routing/login')
-
 app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -20,4 +18,8 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
+const login = require('./routing/login')
 app.use('/login', login)
+
+const forum = require('./routing/forum')
+app.use('/forum', forum)
