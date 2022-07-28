@@ -11,4 +11,11 @@ router.get('/', async (req, res) => {
     res.send(allThreads)
 })
 
+router.post('/', async (req, res) => {
+    const allPosts = await threads.getPostsOfThread(req.body.id)
+    
+    res.status(200)
+    res.send(allPosts)
+})
+
 module.exports = router
