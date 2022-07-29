@@ -6,7 +6,7 @@ async function login(data) {
     const database = client.db("MyDB");
     const user = database.collection("User")
 
-    const query = { Username: data.name }
+    const query = { name: data.name }
 
     const result = await user.findOne(query)
 
@@ -38,7 +38,7 @@ async function register(data) {
     const database = client.db("MyDB");
     const user = database.collection("User")
 
-    const query = { Username: data.name }
+    const query = { name: data.name }
     const result = await user.findOne(query)
 
     if (result) {
@@ -48,7 +48,7 @@ async function register(data) {
             message: 'Username already exists.'
         }
     } else {
-        const query = { Username: data.name, Password: data.password }
+        const query = data
         const result = await user.insertOne(query)
         
         await client.close()
