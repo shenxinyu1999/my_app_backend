@@ -18,4 +18,11 @@ router.post('/', async (req, res) => {
     res.send(allPosts)
 })
 
+router.post('/new', async (req, res) => {
+    const post_id = await threads.newThread(req.body)
+    
+    res.status(200)
+    res.send(post_id)
+})
+
 module.exports = router
