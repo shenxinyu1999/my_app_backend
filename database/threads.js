@@ -35,7 +35,7 @@ async function newThread(data) {
     const database = client.db("MyDB");
     const threads = database.collection("Threads")
 
-    const query = { title: data.title, time: Timestamp() }
+    const query = { user_id: data.user_id, title: data.title, time: Timestamp() }
     const result = await threads.insertOne(query)
 
     await client.close()
