@@ -40,8 +40,6 @@ async function newThread(data) {
 
     await client.close()
 
-    console.log(result)
-
     const newData = {
         thread_id: result.insertedId,
         user_id: data.user_id,
