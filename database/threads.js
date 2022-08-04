@@ -40,6 +40,8 @@ async function newThread(data) {
 
     await client.close()
 
+    console.log(result)
+
     const newData = {
         thread_id: result.insertedId,
         user_id: data.user_id,
@@ -58,7 +60,7 @@ async function newPost(data) {
     const posts = database.collection("Posts")
 
     const query = { 
-        thread_id: data.insertedId,
+        thread_id: data.thread_id,
         user_id: data.user_id,
         content: data.content,
         time: Timestamp(),
