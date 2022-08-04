@@ -39,6 +39,14 @@ async function newThread(data) {
     const result = await threads.insertOne(query)
 
     await client.close()
+
+    const newData = {
+        thread_id: result.insertedId,
+        user_id: data.user_id,
+        content: data.content,
+    }
+
+    const newResult = await newPost(newData)
     
     return result.insertedId
 }
@@ -47,9 +55,14 @@ async function newPost(data) {
     await client.connect();
 
     const database = client.db("MyDB");
-    const threads = database.collection("Threads")
+    const threads = database.collection("Posts")
 
-    const query = { title: data.title, time: Timestamp() }
+    const query = { 
+        thread_id: data.insertedId,
+        user_id: data.user_id,
+        content: data.content,
+        time: Timestamp(),
+    }
     const result = await threads.insertOne(query)
 
     await client.close()
