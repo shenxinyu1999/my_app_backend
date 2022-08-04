@@ -5,14 +5,14 @@ const user = require('../database/user.js')
 
 // define the home page route
 router.post('/', async (req, res) => {
-    const login = req.body.new ? await user.register(req.body) : await user.login(req.body)
+    const result = req.body.new ? await user.register(req.body) : await user.login(req.body)
     
-    if (login.status) {
+    if (result.status) {
         res.status(200)
-        res.send(login.message)
+        res.send(result)
     } else {
         res.status(400)
-        res.send(login.message)
+        res.send(result)
     }
 })
 

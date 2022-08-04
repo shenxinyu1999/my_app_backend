@@ -43,6 +43,20 @@ async function newThread(data) {
     return result.insertedId
 }
 
+async function newPost(data) {
+    await client.connect();
+
+    const database = client.db("MyDB");
+    const threads = database.collection("Threads")
+
+    const query = { title: data.title, time: Timestamp() }
+    const result = await threads.insertOne(query)
+
+    await client.close()
+    
+    return result.insertedId
+}
+
 module.exports = {
     getAllThreads,
     getPostsOfThread,

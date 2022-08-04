@@ -19,7 +19,14 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/new', async (req, res) => {
-    const post_id = await threads.newThread(req.body)
+    const thread_id = await threads.newThread(req.body)
+    
+    res.status(200)
+    res.send(thread_id)
+})
+
+router.post('/reply', async (req, res) => {
+    const post_id = await threads.newPost(req.body)
     
     res.status(200)
     res.send(post_id)

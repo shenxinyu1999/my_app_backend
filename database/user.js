@@ -13,19 +13,20 @@ async function login(data) {
     await client.close()
 
     if (result) {
-        if (result.Password == data.password) {
-            return {
-                status: true,
-                message: 'Login Success.'
-            }
+        if (result.password == data.password) {
+            delete result.password
+            result.status = true
+            return result
         } else {
             return {
+                name: data.name,
                 status: false,
                 message: 'Password incorrect.'
             }
         }
     } else {
         return {
+            name: data.name,
             status: false,
             message: 'Username does not exist.'
         }
