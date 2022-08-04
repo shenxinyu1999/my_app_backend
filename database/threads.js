@@ -41,7 +41,7 @@ async function newThread(data) {
     await client.close()
 
     const newData = {
-        thread_id: result.insertedId,
+        thread_id: result.insertedId.toString(),
         user_id: data.user_id,
         content: data.content,
     }
