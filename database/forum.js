@@ -17,7 +17,7 @@ async function newPost(data) {
 
 
 async function getRepliesOfPost(id) {
-    const post = await Post.findById(id).populate({ path: 'replies', populate: { path: 'user', select: '_id name' } })
+    const post = await Post.findById(id).populate('user', '_id name').populate({ path: 'replies', populate: { path: 'user', select: '_id name' } })
     return post
 }
 
