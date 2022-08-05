@@ -46,7 +46,7 @@ async function newPost(data) {
     await client.close()
 
     const newData = {
-        thread_id: result.insertedId.toString(),
+        post_id: result.insertedId.toString(),
         user_id: data.user_id,
         content: data.content,
     }
@@ -63,7 +63,7 @@ async function newReply(data) {
     
     const replies = database.collection("replies")
     const query = { 
-        thread_id: data.thread_id,
+        post_id: data.post_id,
         user_id: data.user_id,
         content: data.content,
         time: Timestamp(),
