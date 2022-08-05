@@ -1,32 +1,32 @@
 const express = require('express')
 const router = express.Router()
 
-const threads = require('../database/threads')
+const forum = require('../database/forum')
 
 // define the home page route
 router.get('/', async (req, res) => {
-    const allThreads = await threads.getAllThreads()
-    
-    res.status(200)
-    res.send(allThreads)
-})
-
-router.post('/', async (req, res) => {
-    const allPosts = await threads.getPostsOfThread(req.body.id)
+    const allPosts = await forum.getAllPosts()
     
     res.status(200)
     res.send(allPosts)
 })
 
-router.post('/new', async (req, res) => {
-    const thread_id = await threads.newThread(req.body)
+router.post('/', async (req, res) => {
+    const post = await forum.getRepliesOfPost(req.body.id)
     
     res.status(200)
-    res.send(thread_id)
+    res.send(post)
+})
+
+router.post('/new', async (req, res) => {
+    const post_id = await forum.newPost(req.body)
+    
+    res.status(200)
+    res.send(post_id)
 })
 
 router.post('/reply', async (req, res) => {
-    const post_id = await threads.newPost(req.body)
+    const post_id = await forum.newPost(req.body)
     
     res.status(200)
     res.send(post_id)
