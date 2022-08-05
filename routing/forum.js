@@ -26,7 +26,7 @@ router.post('/new', async (req, res) => {
 })
 
 router.post('/reply', async (req, res) => {
-    const post_id = await forum.newPost(req.body)
+    const post_id = await forum.newReply(req.body)
     
     res.status(200)
     res.send(post_id)
