@@ -1,63 +1,35 @@
-const client = require('./client.js')
+const User = require('./schemas/User')
 
 async function login(data) {
-    await client.connect();
-
-    const database = client.db("MyDB");
-    const user = database.collection("User")
-
-    const query = { name: data.name }
-
-    const result = await user.findOne(query)
-
-    await client.close()
-
-    if (result) {
-        if (result.password == data.password) {
-            delete result.password
-            result.status = true
-            return result
-        } else {
-            return {
-                name: data.name,
-                status: false,
-                message: 'Password incorrect.'
-            }
-        }
+    const result = await User.findOne({ name: data.name }).exec()
+    if (result && result.password == data.password) {
+        delete result.password
+        result.status = true
+        return result
     } else {
         return {
             name: data.name,
-            status: false,
-            message: 'Username does not exist.'
+            status: false
         }
     }
 }
 
 async function register(data) {
-    await client.connect();
-
-    const database = client.db("MyDB");
-    const user = database.collection("User")
-
-    const query = { name: data.name }
-    const result = await user.findOne(query)
+    const result = await User.findOne({ name: data.name }).exec()
 
     if (result) {
-        await client.close()
         return {
-            status: false,
-            message: 'Username already exists.'
+            name: data.name,
+            status: false
         }
     } else {
-        const query = data
-        const result = await user.insertOne(query)
-        
-        await client.close()
-        return {
-            status: true,
-            message: 'User created'
-        }
-    }    
+        const newUser = new User(data)
+        const result = await newUser.save()
+
+        delete result.password
+        result.status = true
+        return result
+    }
 }
 
 module.exports = {

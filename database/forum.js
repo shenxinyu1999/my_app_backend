@@ -1,79 +1,36 @@
-const { Timestamp, ObjectId } = require('mongodb');
-const client = require('./client.js')
+const User = require('./schemas/User')
+const Post = require('./schemas/Post')
+const Reply = require('./schemas/Reply')
 
 async function getAllPosts() {
-    await client.connect();
-
-    const database = client.db("MyDB")
-
-    const posts = database.collection("posts")
-    const cursor = await posts.find({})
-    const allPosts = await cursor.toArray();
-
-    await client.close()
-
+    const allPosts = await Post.find({}, '-replies').populate('user', '_id name')
     return allPosts
 }
 
+async function newPost(data) {
+    const post = new Post({ user: data.user, title: data.title, replies: [] })
+    const res = await post.save()
+    const result = await newReply({ user: data.user, content: data.content, post: res._id })
+
+    return result
+}
+
+
 async function getRepliesOfPost(id) {
-    await client.connect();
-
-    const database = client.db("MyDB")
-    
-    const posts = database.collection("posts")
-    const post = await posts.findOne({ _id: ObjectId(id) })
-    
-    const replies = database.collection("replies")
-    const cursor = await replies.find({ post_id: id }).project({ post_id: 0 })
-    const allReplies = await cursor.toArray();
-
-    post.allReplies = allReplies
-
-    await client.close()
-
+    const post = await Post.findById(id).populate('replies')
     return post
 }
 
-async function newPost(data) {
-    await client.connect();
-
-    const database = client.db("MyDB")
-    
-    const posts = database.collection("posts")
-    const query = { user_id: data.user_id, title: data.title, time: Timestamp() }
-    const result = await posts.insertOne(query)
-
-    await client.close()
-
-    const newData = {
-        post_id: result.insertedId.toString(),
-        user_id: data.user_id,
-        content: data.content,
-    }
-
-    const newResult = await newReply(newData)
-    
-    return result.insertedId
-}
-
 async function newReply(data) {
-    await client.connect();
+    const post = await Post.findById(data.post)
 
-    const database = client.db("MyDB")
-    
-    const replies = database.collection("replies")
-    const query = { 
-        post_id: data.post_id,
-        user_id: data.user_id,
-        content: data.content,
-        time: Timestamp(),
-    
-    }
-    const result = await replies.insertOne(query)
+    const reply = new Reply({ user: data.user, content: data.content })
+    const res = await reply.save()
 
-    await client.close()
-    
-    return result.insertedId
+    await post.replies.push(res._id)
+    const result = await post.save()
+
+    return result
 }
 
 module.exports = {
