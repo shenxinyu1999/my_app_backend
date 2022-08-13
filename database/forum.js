@@ -1,6 +1,4 @@
-const User = require('./schemas/User')
-const Post = require('./schemas/Post')
-const Reply = require('./schemas/Reply')
+const client = require('./queries/client')
 
 async function getAllPosts() {
     const allPosts = await Post.find({}, '-replies').populate('user', '_id name')

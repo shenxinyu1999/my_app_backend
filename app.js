@@ -4,8 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser')
 const app = express()
 const port = process.env.PORT || 3000
-require('./database/client')
-require('./database/client_pg')
+require('./database/queries/client')
 
 app.use(cors())
 
