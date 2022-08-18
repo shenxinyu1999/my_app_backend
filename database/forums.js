@@ -19,7 +19,9 @@ async function newPost(data) {
 
     result = result[0]
 
-    return result.post_id
+    return {
+        post_id: result.post_id
+    }
 }
 
 async function getPost(data) {
@@ -52,7 +54,9 @@ async function newReply(data) {
 
     result = result[0]
 
-    return result.post_id
+    return {
+        post_id: result.post_id
+    }
 }
 
 module.exports = {
