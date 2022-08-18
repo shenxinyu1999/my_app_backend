@@ -14,7 +14,7 @@ async function login(data) {
 }
 
 async function register(data) {
-    result = await users.insertUser(data.name, data.password)
+    let result = await users.insertUser(data.name, data.password)
 
     if (!result || result.length == 0) {
         return false
